@@ -1,0 +1,29 @@
+{
+  "name": "potential-wookie",
+  "version": "1.0.0",
+  "description": "grab the stories from the current archaeology channel RSS feed",
+  "main": "stories.js",
+  "dependencies": {
+    "cheerio": "^0.18.0",
+    "feedparser": "^0.19.2",
+    "url-parse": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com/flyingbeagle/potential-wookie.git"
+  },
+  "keywords": [
+    "rss",
+    "parse"
+  ],
+  "author": "~djh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flyingbeagle/potential-wookie/issues"
+  },
+  "homepage": "https://github.com/flyingbeagle/potential-wookie"
+}
