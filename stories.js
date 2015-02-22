@@ -7,6 +7,7 @@ program
     .version('0.1.0')
     .option('--c, --count', 'Count URLs')
     .option('--v, --verbose','Show full URL')
+    .option('--r, --raw','Show raw metadata')
     .parse(process.argv);
 
 console.log(config.rssFile);
@@ -46,6 +47,7 @@ feedparser.on('readable', function(){
        var links = $('a', source).attr('href');
        i++;
        sites.push(URL(links, true).host);
+       if (program.raw) console.log(item);
        if (program.verbose) console.log(links);
     }    
 });
