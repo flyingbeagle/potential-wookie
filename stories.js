@@ -9,7 +9,6 @@ program
     .option('--v, --verbose','Show full URL')
     .parse(process.argv);
 
-
 console.log(config.rssFile);
 
 var FeedParser = require('feedparser'),
@@ -43,7 +42,6 @@ feedparser.on('readable', function(){
         item;
         
     while (item = stream.read()){
-       // console.log(item);
        var source = item['rss:description']['#'];
        var links = $('a', source).attr('href');
        i++;
@@ -55,19 +53,13 @@ feedparser.on('readable', function(){
 feedparser.on('end', function(){
     console.log('story count = ' + i);
     console.log('');
-    
-   // if (program.count) console.log(sites);
-    
-   var simple = rank(sites);
-   var array = makeArray(simple);
-   //var array = Array.prototype.slice.call(simple, 1);
-   //if (program.count) console.log(array);
-  if (program.count) console.log(array.sort(function(a,b){return b.count - a.count}));
-
-
+    var simple = rank(sites);
+    var array = makeArray(simple);
+   
+    if (program.count) console.log(array.sort(function(a,b){return b.count - a.count}));
 });
 
-// aggregate the 
+// tally up the array by count
 function rank(array){
     var result = array.reduce(function(p, c){
         if (c in p) {
