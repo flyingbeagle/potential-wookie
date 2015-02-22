@@ -1,9 +1,16 @@
-var common = require('./common.js');
-var config = common.config();
+var program = require('commander'),
+    common = require('./common.js'),
+    config = common.config(),
+    options = [];
+
+program
+    .version('0.1.0')
+    .option('--c, --count', 'Count URLs')
+    .option('--v, --verbose','Show full URL')
+    .parse(process.argv);
+
 
 console.log(config.rssFile);
-
-var options = [];
 
 var FeedParser = require('feedparser'),
     request = require('request'),
@@ -28,7 +35,8 @@ feedparser.on('error', function(error){
      console.log('request ERR: ' + error); 
 });
 
-var i = 0;
+var i = 0,
+    sites = [];
 feedparser.on('readable', function(){
     var stream = this,
         meta = this.meta,
@@ -39,10 +47,45 @@ feedparser.on('readable', function(){
        var source = item['rss:description']['#'];
        var links = $('a', source).attr('href');
        i++;
-       console.log(links);
+       sites.push(URL(links, true).host);
+       if (program.verbose) console.log(links);
     }    
 });
 
 feedparser.on('end', function(){
     console.log('story count = ' + i);
+    console.log('');
+    
+   // if (program.count) console.log(sites);
+    
+   var simple = rank(sites);
+   var array = makeArray(simple);
+   //var array = Array.prototype.slice.call(simple, 1);
+   //if (program.count) console.log(array);
+  if (program.count) console.log(array.sort(function(a,b){return b.count - a.count}));
+
+
 });
+
+// aggregate the 
+function rank(array){
+    var result = array.reduce(function(p, c){
+        if (c in p) {
+           p[c]++;
+        } else {
+            p[c]=1;
+        }
+        return p;
+    }, {});
+
+    return result;
+}
+
+// return an array from an object
+function makeArray(obj){
+    var arr = [];
+    for (var a in obj){
+        arr.push({'site': a, 'count': obj[a] });
+    }
+    return arr;
+}
