@@ -1,5 +1,6 @@
 var program = require('commander'),
     common = require('./common.js'),
+    utility = require('./utility.js'),
     config = common.config(),
     options = [];
 
@@ -53,33 +54,12 @@ feedparser.on('readable', function(){
 });
 
 feedparser.on('end', function(){
-    console.log('story count = ' + i);
+    console.log('holding %s weeks worth of stories' , i);
     console.log('');
-    var simple = rank(sites);
-    var array = makeArray(simple);
+    console.log(utility);
+    var simple = utility.rank(sites);
+    var array = utility.makeArray(simple);
    
     if (program.count) console.log(array.sort(function(a,b){return b.count - a.count}));
 });
 
-// tally up the array by count
-function rank(array){
-    var result = array.reduce(function(p, c){
-        if (c in p) {
-           p[c]++;
-        } else {
-            p[c]=1;
-        }
-        return p;
-    }, {});
-
-    return result;
-}
-
-// return an array from an object
-function makeArray(obj){
-    var arr = [];
-    for (var a in obj){
-        arr.push({'site': a, 'count': obj[a] });
-    }
-    return arr;
-}
