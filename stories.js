@@ -9,6 +9,7 @@ program
     .option('--c, --count', 'Count URLs')
     .option('--v, --verbose','Show full URL')
     .option('--r, --raw','Show raw metadata')
+    .option('--d, --date','Get pubdates')
     .parse(process.argv);
 
 console.log(config.rssFile);
@@ -45,18 +46,19 @@ feedparser.on('readable', function(){
         
     while (item = stream.read()){
        var source = item['rss:description']['#'];
+       var pubdate = meta['rss:pubdate'];
        var links = $('a', source).attr('href');
        i++;
        sites.push(URL(links, true).host);
        if (program.raw) console.log(item);
        if (program.verbose) console.log(links);
+       if (program.date) console.log(item['rss:pubdate']['#']);
     }    
 });
 
 feedparser.on('end', function(){
     console.log('holding %s weeks worth of stories' , i);
     console.log('');
-    console.log(utility);
     var simple = utility.rank(sites);
     var array = utility.makeArray(simple);
    
