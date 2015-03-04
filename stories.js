@@ -2,17 +2,17 @@ var program = require('commander'),
     common = require('./common.js'),
     utility = require('./utility.js'),
     config = common.config(),
-    options = [];
+    opts = opts || [];
 
 program
-    .version('0.1.0')
+    .version('0.1.1')
     .option('--c, --count', 'Count URLs')
     .option('--v, --verbose','Show full URL')
     .option('--r, --raw','Show raw metadata')
     .option('--d, --date','Get pubdates')
     .parse(process.argv);
 
-console.log(config.rssFile);
+console.log('Reading this file: ' + config.rssFile);
 
 var FeedParser = require('feedparser'),
     request = require('request'),
@@ -20,7 +20,7 @@ var FeedParser = require('feedparser'),
 
 var req = request(config.rssFile),
     URL = require('url-parse'),
-    feedparser = new FeedParser([options]);
+    feedparser = new FeedParser([opts]);
     
 req.on('error', function(error){
    console.log('request ERR: ' + error); 
