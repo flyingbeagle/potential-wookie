@@ -10,6 +10,7 @@ program
     .option('--v, --verbose','Show full URL')
     .option('--r, --raw','Show raw metadata')
     .option('--d, --date','Get pubdates')
+    .option('--t, --test','Test new functionality')
     .parse(process.argv);
 
 console.log('Reading this file: ' + config.rssFile);
@@ -38,6 +39,7 @@ feedparser.on('error', function(error){
 });
 
 var i = 0,
+    items = [],
     sites = [];
 feedparser.on('readable', function(){
     var stream = this,
@@ -49,10 +51,12 @@ feedparser.on('readable', function(){
        var pubdate = meta['rss:pubdate'];
        var links = $('a', source).attr('href');
        i++;
+       items.push(item);
        sites.push(URL(links, true).host);
        if (program.raw) console.log(item);
        if (program.verbose) console.log(links);
        if (program.date) console.log(item['rss:pubdate']['#']);
+       if (program.test) console.log('TODO items count = ' + items.length);
     }    
 });
 
@@ -62,6 +66,7 @@ feedparser.on('end', function(){
     var simple = utility.rank(sites);
     var array = utility.makeArray(simple);
    
+    if (program.test) console.log(items);
     if (program.count) console.log(array.sort(function(a,b){return b.count - a.count}));
 });
 
