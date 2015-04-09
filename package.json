@@ -5,6 +5,8 @@
   "main": "stories.js",
   "dependencies": {
     "cheerio": "^0.18.0",
+    "colors": "^1.0.3",
+    "commander": "^2.7.1",
     "feedparser": "^0.19.2",
     "url-parse": "^1.0.0"
   },
